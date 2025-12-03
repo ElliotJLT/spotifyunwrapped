@@ -1,5 +1,5 @@
-import { Upload, FileCheck, Music2, Loader2, ExternalLink, ArrowRight, Ghost, Flame, Moon, SkipForward, Shuffle, Calendar, Sparkles } from 'lucide-react';
-import { useState, useCallback } from 'react';
+import { Upload, FileCheck, Music2, Loader2, ExternalLink, ArrowRight, Ghost, Flame, Moon, SkipForward, Shuffle, Calendar } from 'lucide-react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { parseSpotifyJSON } from '@/lib/jsonParser';
 
 interface FileUploadProps {
@@ -147,44 +147,55 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
           </p>
         </div>
 
-        <div
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          className={`
-            relative card-elevated p-12 transition-all duration-300 cursor-pointer
-            ${isDragging ? 'border-primary glow-primary scale-[1.02]' : 'hover:border-primary/50'}
-          `}
-        >
-          <input
-            type="file"
-            multiple
-            accept=".csv,.json"
-            onChange={(e) => e.target.files && handleFiles(e.target.files)}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-            disabled={isProcessing}
-          />
+        {/* Orange orb glow */}
+        <div className="relative">
+          <div className="absolute -inset-4 bg-gradient-to-r from-orange-500/20 via-amber-500/30 to-orange-500/20 rounded-3xl blur-2xl animate-pulse" />
+          <div className="absolute -inset-2 bg-gradient-to-br from-orange-400/10 to-amber-600/10 rounded-2xl blur-xl" />
           
-          <div className="flex flex-col items-center space-y-4 text-center">
-            <div className={`
-              w-16 h-16 rounded-full flex items-center justify-center transition-colors
-              ${isDragging ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground'}
-            `}>
-              {isProcessing ? (
-                <Loader2 className="w-7 h-7 animate-spin" />
-              ) : (
-                <Upload className="w-7 h-7" />
-              )}
-            </div>
-            <div>
-              <p className="text-foreground font-medium text-lg">
-                {isProcessing ? 'Processing your listening history...' : 'Drop your JSON or CSV files here'}
-              </p>
-              <p className="text-muted-foreground text-sm mt-1">
-                {isProcessing 
-                  ? `File ${progress.currentFile} of ${progress.totalFiles} • ${progress.trackCount.toLocaleString()} tracks found`
-                  : 'or click to browse'}
-              </p>
+          <div
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            className={`
+              relative card-elevated p-12 transition-all duration-300 cursor-pointer
+              ${isDragging ? 'border-orange-400 scale-[1.02]' : 'hover:border-orange-400/50'}
+            `}
+            style={{ 
+              boxShadow: isDragging 
+                ? '0 0 40px rgba(251, 146, 60, 0.3)' 
+                : '0 0 20px rgba(251, 146, 60, 0.1)' 
+            }}
+          >
+            <input
+              type="file"
+              multiple
+              accept=".csv,.json"
+              onChange={(e) => e.target.files && handleFiles(e.target.files)}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              disabled={isProcessing}
+            />
+            
+            <div className="flex flex-col items-center space-y-4 text-center">
+              <div className={`
+                w-16 h-16 rounded-full flex items-center justify-center transition-colors
+                ${isDragging ? 'bg-orange-500 text-white' : 'bg-orange-500/20 text-orange-400'}
+              `}>
+                {isProcessing ? (
+                  <Loader2 className="w-7 h-7 animate-spin" />
+                ) : (
+                  <Upload className="w-7 h-7" />
+                )}
+              </div>
+              <div>
+                <p className="text-foreground font-medium text-lg">
+                  {isProcessing ? 'Processing your listening history...' : 'Drop your JSON or CSV files here'}
+                </p>
+                <p className="text-muted-foreground text-sm mt-1">
+                  {isProcessing 
+                    ? `File ${progress.currentFile} of ${progress.totalFiles} • ${progress.trackCount.toLocaleString()} tracks found`
+                    : 'or click to browse'}
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -196,24 +207,21 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
           </div>
         )}
 
-        {/* Insight Preview Pills */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span>Insights you'll unlock</span>
-          </div>
-          <div className="flex flex-wrap justify-center gap-2">
-            {insightPreviews.map((insight, index) => {
+        {/* Auto-scrolling Insight Carousel */}
+        <div className="relative overflow-hidden">
+          <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+          <div className="flex gap-3 animate-marquee">
+            {[...insightPreviews, ...insightPreviews].map((insight, index) => {
               const Icon = insight.icon;
               return (
                 <div
-                  key={insight.label}
-                  className="group flex items-center gap-2 px-3 py-2 rounded-full bg-card/60 border border-border/50 hover:border-primary/50 hover:bg-card transition-all duration-200"
-                  style={{ animationDelay: `${index * 50}ms` }}
+                  key={`${insight.label}-${index}`}
+                  className="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full bg-card/60 border border-border/50"
                 >
-                  <Icon className="w-3.5 h-3.5 text-primary" />
-                  <span className="text-xs font-medium text-foreground">{insight.label}</span>
-                  <span className="text-xs text-muted-foreground hidden sm:inline">• {insight.desc}</span>
+                  <Icon className="w-3.5 h-3.5 text-orange-400" />
+                  <span className="text-xs font-medium text-foreground whitespace-nowrap">{insight.label}</span>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">• {insight.desc}</span>
                 </div>
               );
             })}
