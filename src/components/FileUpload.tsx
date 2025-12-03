@@ -1,4 +1,4 @@
-import { Upload, FileCheck, BookHeart, Loader2, ExternalLink, ArrowRight, Ghost, Flame, Moon, SkipForward, Shuffle, Calendar } from 'lucide-react';
+import { Upload, FileCheck, Loader2, ExternalLink, ArrowRight, Ghost, Flame, Moon, SkipForward, Shuffle, Calendar } from 'lucide-react';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { parseSpotifyJSON } from '@/lib/jsonParser';
 
@@ -136,9 +136,6 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
     <div className="min-h-screen flex flex-col items-center justify-center p-8">
       <div className="max-w-2xl w-full space-y-8 animate-fade-up">
         <div className="text-center space-y-4">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-500/20 via-amber-500/15 to-orange-600/20 mb-4 shadow-lg shadow-orange-500/10">
-            <BookHeart className="w-10 h-10 text-orange-400" />
-          </div>
           <h1 className="text-4xl md:text-5xl font-display text-foreground">
             Your Music Diary
           </h1>
