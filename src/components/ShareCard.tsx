@@ -168,8 +168,8 @@ export function ShareCard() {
       </Button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-card border border-border rounded-2xl p-6 max-w-sm w-full space-y-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="bg-card border border-border rounded-2xl p-6 max-w-sm w-full space-y-4 my-auto">
             <div className="flex items-center justify-between">
               <h3 className="text-foreground font-medium">Export Your Diary</h3>
               <button
