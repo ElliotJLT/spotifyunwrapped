@@ -164,52 +164,57 @@ export function ShareCard() {
       </Button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="bg-card border border-border rounded-2xl p-6 max-w-sm w-full space-y-4 my-auto">
-            <div className="flex items-center justify-between">
-              <h3 className="text-foreground font-medium">Export Your Diary</h3>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-muted-foreground hover:text-foreground"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <p className="text-sm text-muted-foreground">
-              Save your full music diary as a PDF or image to share with friends.
-            </p>
-
-            {isGenerating && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground py-2">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                <span>{progress || 'Generating... this may take a moment'}</span>
+        <div 
+          className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm overflow-y-auto"
+          onClick={(e) => e.target === e.currentTarget && setIsOpen(false)}
+        >
+          <div className="min-h-full flex items-center justify-center p-4">
+            <div className="bg-card border border-border rounded-2xl p-6 max-w-sm w-full space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-foreground font-medium">Export Your Diary</h3>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
-            )}
 
-            <div className="flex flex-col gap-3">
-              <Button
-                onClick={handleDownloadPDF}
-                className="w-full gap-2 bg-orange-500 hover:bg-orange-600 text-white"
-                disabled={isGenerating}
-              >
-                <FileText className="w-4 h-4" />
-                Download PDF
-              </Button>
-              <Button
-                onClick={handleDownloadImage}
-                variant="outline"
-                className="w-full gap-2"
-                disabled={isGenerating}
-              >
-                <Image className="w-4 h-4" />
-                Download Image
-              </Button>
+              <p className="text-sm text-muted-foreground">
+                Save your full music diary as a PDF or image to share with friends.
+              </p>
+
+              {isGenerating && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground py-2">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>{progress || 'Generating... this may take a moment'}</span>
+                </div>
+              )}
+
+              <div className="flex flex-col gap-3">
+                <Button
+                  onClick={handleDownloadPDF}
+                  className="w-full gap-2 bg-orange-500 hover:bg-orange-600 text-white"
+                  disabled={isGenerating}
+                >
+                  <FileText className="w-4 h-4" />
+                  Download PDF
+                </Button>
+                <Button
+                  onClick={handleDownloadImage}
+                  variant="outline"
+                  className="w-full gap-2"
+                  disabled={isGenerating}
+                >
+                  <Image className="w-4 h-4" />
+                  Download Image
+                </Button>
+              </div>
+
+              <p className="text-xs text-muted-foreground text-center">
+                Your data stays on your device
+              </p>
             </div>
-
-            <p className="text-xs text-muted-foreground text-center">
-              Your data stays on your device
-            </p>
           </div>
         </div>
       )}
