@@ -16,7 +16,7 @@ import { ListeningBehavior } from './ListeningBehavior';
 import { ShuffleVsIntentional } from './ShuffleVsIntentional';
 import { TimeCapsules } from './TimeCapsules';
 import { ShareCard } from './ShareCard';
-import { Music2 } from 'lucide-react';
+import { BookHeart } from 'lucide-react';
 
 interface DashboardProps {
   files: Record<string, string>;
@@ -80,8 +80,8 @@ export function Dashboard({ files, rawJsonFiles = [] }: DashboardProps) {
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
         <div className="container max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-              <Music2 className="w-4 h-4 text-primary" />
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500/20 to-amber-500/20 flex items-center justify-center">
+              <BookHeart className="w-4 h-4 text-orange-400" />
             </div>
             <span className="font-display text-lg text-foreground">Music Diary</span>
           </div>
