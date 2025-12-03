@@ -1,4 +1,4 @@
-import { Upload, FileCheck, Music2, Loader2 } from 'lucide-react';
+import { Upload, FileCheck, Music2, Loader2, ExternalLink, ArrowRight } from 'lucide-react';
 import { useState, useCallback } from 'react';
 import { parseSpotifyJSON } from '@/lib/jsonParser';
 
@@ -134,7 +134,7 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
             Your Music Diary
           </h1>
           <p className="text-muted-foreground text-lg max-w-md mx-auto">
-            Upload your Spotify extended streaming history JSON files to explore your musical journey
+            Upload your Spotify streaming history to explore your musical journey
           </p>
         </div>
 
@@ -211,6 +211,45 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
             {Object.keys(uploadedFiles).length} data set(s) ready • Scroll down to explore
           </p>
         )}
+
+        {/* How to get your data */}
+        <div className="mt-8 pt-8 border-t border-border/50">
+          <p className="text-muted-foreground text-sm text-center mb-4">Don't have your data yet?</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-card/50 border border-border/50 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="w-6 h-6 rounded-full bg-primary/20 text-primary text-sm font-medium flex items-center justify-center">1</span>
+                <span className="text-foreground font-medium text-sm">Request your data</span>
+              </div>
+              <p className="text-muted-foreground text-xs mb-3">
+                Go to Spotify Privacy settings and request "Extended streaming history"
+              </p>
+              <a
+                href="https://www.spotify.com/us/account/privacy/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-primary text-sm hover:underline"
+              >
+                Open Spotify Privacy
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+            <div className="bg-card/50 border border-border/50 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="w-6 h-6 rounded-full bg-primary/20 text-primary text-sm font-medium flex items-center justify-center">2</span>
+                <span className="text-foreground font-medium text-sm">Upload the JSON files</span>
+              </div>
+              <p className="text-muted-foreground text-xs mb-3">
+                Once you receive the email (up to 30 days), upload the JSON files here
+              </p>
+              <p className="text-xs text-muted-foreground/70 flex items-center gap-1">
+                <span>Your data stays on your device</span>
+                <ArrowRight className="w-3 h-3" />
+                <span>Never uploaded</span>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
