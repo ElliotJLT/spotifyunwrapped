@@ -19,6 +19,7 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [jsonFiles, setJsonFiles] = useState<string[]>([]);
+  const [progress, setProgress] = useState({ currentFile: 0, totalFiles: 0, trackCount: 0 });
 
   const handleFiles = useCallback(async (files: FileList) => {
     const newFiles: Record<string, string> = { ...uploadedFiles };
@@ -61,10 +62,23 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
     if (newJsonFiles.length > 0) {
       setIsProcessing(true);
       setJsonFiles(newJsonFiles);
+      setProgress({ currentFile: 0, totalFiles: newJsonFiles.length, trackCount: 0 });
       
       // Use setTimeout to allow UI to update before heavy processing
       setTimeout(() => {
         try {
+          // Count total tracks for progress
+          let totalTracks = 0;
+          newJsonFiles.forEach((jsonText, index) => {
+            const entries = JSON.parse(jsonText);
+            totalTracks += entries.length;
+            setProgress(prev => ({ 
+              ...prev, 
+              currentFile: index + 1, 
+              trackCount: totalTracks 
+            }));
+          });
+          
           const parsedData = parseSpotifyJSON(newJsonFiles);
           const combinedFiles = {
             ...newFiles,
@@ -158,7 +172,9 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
                 {isProcessing ? 'Processing your listening history...' : 'Drop your JSON or CSV files here'}
               </p>
               <p className="text-muted-foreground text-sm mt-1">
-                {isProcessing ? 'This may take a moment for large files' : 'or click to browse'}
+                {isProcessing 
+                  ? `File ${progress.currentFile} of ${progress.totalFiles} • ${progress.trackCount.toLocaleString()} tracks found`
+                  : 'or click to browse'}
               </p>
             </div>
           </div>

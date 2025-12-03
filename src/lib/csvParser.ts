@@ -47,9 +47,19 @@ export function parseCSV<T>(csvText: string): T[] {
 
     headers.forEach((header, index) => {
       const value = values[index] || '';
-      // Try to parse as number
-      const numValue = parseFloat(value);
-      row[header] = isNaN(numValue) ? value : numValue;
+      // Preserve date/time strings - check for ISO timestamp or date patterns
+      const isDateTimeColumn = header.toLowerCase().includes('time') || 
+                               header.toLowerCase().includes('date') ||
+                               header.toLowerCase() === 'timestamp' ||
+                               /^\d{4}-\d{2}-\d{2}/.test(value);
+      
+      if (isDateTimeColumn) {
+        row[header] = value;
+      } else {
+        // Try to parse as number for non-date columns
+        const numValue = parseFloat(value);
+        row[header] = isNaN(numValue) ? value : numValue;
+      }
     });
 
     data.push(row as T);
