@@ -56,40 +56,36 @@ export function ShareCard() {
 
       setProgress('Generating PDF...');
 
-      // Create PDF with better margins
-      const imgWidth = 190; // A4 width minus margins
-      const pageHeight = 277; // A4 height minus margins
-      const margin = 10;
+      // A4 dimensions in mm
+      const pageWidth = 210;
+      const pageHeight = 297;
+      
+      // Calculate image dimensions to fill page width
+      const imgWidth = pageWidth;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       
+      // Calculate how many pages we need
+      const totalPages = Math.ceil(imgHeight / pageHeight);
+      
       const pdf = new jsPDF('p', 'mm', 'a4');
-      let heightLeft = imgHeight;
-      let position = margin;
-
-      // Add first page
-      pdf.addImage(
-        canvas.toDataURL('image/jpeg', 0.92),
-        'JPEG',
-        margin,
-        position,
-        imgWidth,
-        imgHeight
-      );
-      heightLeft -= (pageHeight - margin);
-
-      // Add subsequent pages if needed
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight + margin;
-        pdf.addPage();
+      
+      // For each page, we position the full image so the correct portion shows
+      for (let page = 0; page < totalPages; page++) {
+        if (page > 0) {
+          pdf.addPage();
+        }
+        
+        // Calculate y position - negative to push the image up for subsequent pages
+        const yPosition = -(page * pageHeight);
+        
         pdf.addImage(
-          canvas.toDataURL('image/jpeg', 0.92),
+          canvas.toDataURL('image/jpeg', 0.95),
           'JPEG',
-          margin,
-          position,
+          0,
+          yPosition,
           imgWidth,
           imgHeight
         );
-        heightLeft -= pageHeight;
       }
 
       pdf.save('my-music-diary.pdf');
