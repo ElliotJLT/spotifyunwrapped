@@ -149,8 +149,8 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
 
         {/* Orange orb glow */}
         <div className="relative">
-          <div className="absolute -inset-4 bg-gradient-to-r from-orange-500/20 via-amber-500/30 to-orange-500/20 rounded-3xl blur-2xl animate-pulse" />
-          <div className="absolute -inset-2 bg-gradient-to-br from-orange-400/10 to-amber-600/10 rounded-2xl blur-xl" />
+          <div className="absolute -inset-6 bg-gradient-to-r from-orange-500/15 via-amber-500/25 to-orange-500/15 rounded-3xl blur-3xl animate-pulse-glow" />
+          <div className="absolute -inset-3 bg-gradient-to-br from-orange-400/10 to-amber-600/10 rounded-2xl blur-2xl" />
           
           <div
             onDrop={handleDrop}
@@ -208,9 +208,9 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
         )}
 
         {/* Auto-scrolling Insight Carousel */}
-        <div className="relative overflow-hidden">
-          <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+        <div className="relative overflow-hidden py-1">
+          <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background via-background/80 to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background via-background/80 to-transparent z-10 pointer-events-none" />
           <div className="flex gap-3 animate-marquee">
             {[...insightPreviews, ...insightPreviews].map((insight, index) => {
               const Icon = insight.icon;
