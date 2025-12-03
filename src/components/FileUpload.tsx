@@ -143,7 +143,7 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
             Your Music Diary
           </h1>
           <p className="text-muted-foreground text-lg max-w-md mx-auto">
-            Upload your Spotify streaming history to explore your musical journey
+            Discover insights Wrapped won't show you
           </p>
         </div>
 

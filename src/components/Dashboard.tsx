@@ -16,7 +16,7 @@ import { ListeningBehavior } from './ListeningBehavior';
 import { ShuffleVsIntentional } from './ShuffleVsIntentional';
 import { TimeCapsules } from './TimeCapsules';
 import { ShareCard } from './ShareCard';
-import { Music2, Sparkles } from 'lucide-react';
+import { Music2 } from 'lucide-react';
 
 interface DashboardProps {
   files: Record<string, string>;
@@ -86,10 +86,7 @@ export function Dashboard({ files, rawJsonFiles = [] }: DashboardProps) {
             <span className="font-display text-lg text-foreground">Music Diary</span>
           </div>
           <div className="flex items-center gap-3">
-            <ShareCard 
-              stats={data.heroStats} 
-              topArtists={data.topArtists.slice(0, 5).map(a => a.artist)} 
-            />
+            <ShareCard />
             <button
               onClick={() => window.location.reload()}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -136,18 +133,6 @@ export function Dashboard({ files, rawJsonFiles = [] }: DashboardProps) {
       {/* New Insights Section */}
       {insights && (
         <>
-          <div className="py-12 border-t border-border/50">
-            <div className="container max-w-6xl mx-auto px-4">
-              <div className="flex items-center gap-3 mb-2">
-                <Sparkles className="w-6 h-6 text-primary" />
-                <h2 className="font-display text-3xl text-foreground">Deep Insights</h2>
-              </div>
-              <p className="text-muted-foreground">
-                Patterns Wrapped doesn't show you
-              </p>
-            </div>
-          </div>
-
           {/* Forgotten Favorites */}
           {insights.forgottenArtists.length > 0 && (
             <ForgottenFavorites artists={insights.forgottenArtists} />
