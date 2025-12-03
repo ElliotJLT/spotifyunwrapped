@@ -74,8 +74,8 @@ export default {
           to: { height: "0" },
         },
         "pulse-glow": {
-          "0%, 100%": { opacity: "0.5" },
-          "50%": { opacity: "1" },
+          "0%, 100%": { opacity: "0.3", transform: "scale(1)" },
+          "50%": { opacity: "0.6", transform: "scale(1.02)" },
         },
         "marquee": {
           "0%": { transform: "translateX(0)" },
@@ -85,8 +85,8 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
-        "marquee": "marquee 20s linear infinite",
+        "pulse-glow": "pulse-glow 6s ease-in-out infinite",
+        "marquee": "marquee 25s linear infinite",
       },
     },
   },
