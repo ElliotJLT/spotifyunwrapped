@@ -1,5 +1,6 @@
-import { Upload, FileCheck, Music2 } from 'lucide-react';
+import { Upload, FileCheck, Music2, Loader2 } from 'lucide-react';
 import { useState, useCallback } from 'react';
+import { parseSpotifyJSON } from '@/lib/jsonParser';
 
 interface FileUploadProps {
   onFilesUploaded: (files: Record<string, string>) => void;
@@ -16,14 +17,24 @@ const expectedFiles = [
 export function FileUpload({ onFilesUploaded }: FileUploadProps) {
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, string>>({});
   const [isDragging, setIsDragging] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [jsonFiles, setJsonFiles] = useState<string[]>([]);
 
   const handleFiles = useCallback(async (files: FileList) => {
     const newFiles: Record<string, string> = { ...uploadedFiles };
+    const newJsonFiles: string[] = [...jsonFiles];
 
     for (const file of Array.from(files)) {
       const text = await file.text();
       const fileName = file.name.toLowerCase();
 
+      // Check if it's a JSON file (Spotify extended streaming history)
+      if (fileName.endsWith('.json')) {
+        newJsonFiles.push(text);
+        continue;
+      }
+
+      // CSV file handling (existing logic)
       for (const expected of expectedFiles) {
         if (fileName.includes(expected.key.replace('_', '')) || 
             fileName === expected.file.toLowerCase()) {
@@ -46,12 +57,40 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
       }
     }
 
+    // If we have JSON files, process them
+    if (newJsonFiles.length > 0) {
+      setIsProcessing(true);
+      setJsonFiles(newJsonFiles);
+      
+      // Use setTimeout to allow UI to update before heavy processing
+      setTimeout(() => {
+        try {
+          const parsedData = parseSpotifyJSON(newJsonFiles);
+          const combinedFiles = {
+            ...newFiles,
+            listening_events: parsedData.listening_events,
+            daily_summary: parsedData.daily_summary,
+            top_artists: parsedData.top_artists,
+            hourly_profile: parsedData.hourly_profile,
+            sessions: parsedData.sessions,
+          };
+          setUploadedFiles(combinedFiles);
+          setIsProcessing(false);
+          onFilesUploaded(combinedFiles);
+        } catch (e) {
+          console.error('Error processing JSON files:', e);
+          setIsProcessing(false);
+        }
+      }, 100);
+      return;
+    }
+
     setUploadedFiles(newFiles);
 
     if (Object.keys(newFiles).length >= 1) {
       onFilesUploaded(newFiles);
     }
-  }, [uploadedFiles, onFilesUploaded]);
+  }, [uploadedFiles, onFilesUploaded, jsonFiles]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -81,7 +120,7 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
             Your Music Diary
           </h1>
           <p className="text-muted-foreground text-lg max-w-md mx-auto">
-            Upload your Spotify listening data to explore your musical journey
+            Upload your Spotify extended streaming history JSON files to explore your musical journey
           </p>
         </div>
 
@@ -97,9 +136,10 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
           <input
             type="file"
             multiple
-            accept=".csv"
+            accept=".csv,.json"
             onChange={(e) => e.target.files && handleFiles(e.target.files)}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            disabled={isProcessing}
           />
           
           <div className="flex flex-col items-center space-y-4 text-center">
@@ -107,39 +147,52 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
               w-16 h-16 rounded-full flex items-center justify-center transition-colors
               ${isDragging ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground'}
             `}>
-              <Upload className="w-7 h-7" />
+              {isProcessing ? (
+                <Loader2 className="w-7 h-7 animate-spin" />
+              ) : (
+                <Upload className="w-7 h-7" />
+              )}
             </div>
             <div>
               <p className="text-foreground font-medium text-lg">
-                Drop your CSV files here
+                {isProcessing ? 'Processing your listening history...' : 'Drop your JSON or CSV files here'}
               </p>
               <p className="text-muted-foreground text-sm mt-1">
-                or click to browse
+                {isProcessing ? 'This may take a moment for large files' : 'or click to browse'}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {expectedFiles.map((file) => (
-            <div
-              key={file.key}
-              className={`
-                flex items-center gap-2 px-4 py-3 rounded-xl text-sm transition-all
-                ${uploadedFiles[file.key] 
-                  ? 'bg-accent/20 text-accent border border-accent/30' 
-                  : 'bg-secondary/50 text-muted-foreground border border-transparent'}
-              `}
-            >
-              <FileCheck className={`w-4 h-4 flex-shrink-0 ${uploadedFiles[file.key] ? 'text-accent' : 'text-muted-foreground/50'}`} />
-              <span className="truncate">{file.label}</span>
-            </div>
-          ))}
-        </div>
+        {jsonFiles.length > 0 && (
+          <div className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm bg-accent/20 text-accent border border-accent/30">
+            <FileCheck className="w-4 h-4 flex-shrink-0" />
+            <span>{jsonFiles.length} JSON file(s) loaded</span>
+          </div>
+        )}
 
-        {Object.keys(uploadedFiles).length > 0 && (
+        {jsonFiles.length === 0 && (
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {expectedFiles.map((file) => (
+              <div
+                key={file.key}
+                className={`
+                  flex items-center gap-2 px-4 py-3 rounded-xl text-sm transition-all
+                  ${uploadedFiles[file.key] 
+                    ? 'bg-accent/20 text-accent border border-accent/30' 
+                    : 'bg-secondary/50 text-muted-foreground border border-transparent'}
+                `}
+              >
+                <FileCheck className={`w-4 h-4 flex-shrink-0 ${uploadedFiles[file.key] ? 'text-accent' : 'text-muted-foreground/50'}`} />
+                <span className="truncate">{file.label}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {Object.keys(uploadedFiles).length > 0 && !isProcessing && (
           <p className="text-center text-muted-foreground text-sm animate-fade-in">
-            {Object.keys(uploadedFiles).length} file(s) loaded • Scroll down to explore
+            {Object.keys(uploadedFiles).length} data set(s) ready • Scroll down to explore
           </p>
         )}
       </div>
