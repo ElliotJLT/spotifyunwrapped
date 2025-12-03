@@ -11,32 +11,62 @@ export function ListeningTimeline({ data }: ListeningTimelineProps) {
     // Group by week for cleaner visualization
     const sorted = [...data].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     
+    const formatDate = (dateStr: string, showYear: boolean) => {
+      const d = new Date(dateStr);
+      if (showYear) {
+        return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+      }
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    };
+
+    const formatFullDate = (dateStr: string) => {
+      return new Date(dateStr).toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric' 
+      });
+    };
+    
     if (sorted.length <= 60) {
       return sorted.map(d => ({
-        date: new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        date: formatDate(d.date, false),
+        fullDate: formatFullDate(d.date),
         minutes: Math.round(d.minutes_listened),
       }));
     }
 
-    // Weekly aggregation for larger datasets
-    const weekly: { date: string; minutes: number }[] = [];
+    // Weekly aggregation for larger datasets - include year when it changes
+    const weekly: { date: string; fullDate: string; minutes: number }[] = [];
     let weekMinutes = 0;
-    let weekStart = '';
+    let weekStartDate = '';
+    let lastYear = -1;
 
     sorted.forEach((d, i) => {
+      const currentYear = new Date(d.date).getFullYear();
+      const yearChanged = lastYear !== -1 && currentYear !== lastYear;
+      
       if (i % 7 === 0) {
-        if (weekStart) {
-          weekly.push({ date: weekStart, minutes: Math.round(weekMinutes / 7) });
+        if (weekStartDate) {
+          weekly.push({ 
+            date: formatDate(weekStartDate, yearChanged || weekly.length % 12 === 0),
+            fullDate: formatFullDate(weekStartDate),
+            minutes: Math.round(weekMinutes / 7) 
+          });
         }
-        weekStart = new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        weekStartDate = d.date;
         weekMinutes = d.minutes_listened;
+        lastYear = currentYear;
       } else {
         weekMinutes += d.minutes_listened;
       }
     });
 
-    if (weekStart) {
-      weekly.push({ date: weekStart, minutes: Math.round(weekMinutes / 7) });
+    if (weekStartDate) {
+      weekly.push({ 
+        date: formatDate(weekStartDate, true),
+        fullDate: formatFullDate(weekStartDate),
+        minutes: Math.round(weekMinutes / 7) 
+      });
     }
 
     return weekly;
@@ -88,6 +118,7 @@ export function ListeningTimeline({ data }: ListeningTimelineProps) {
                 labelStyle={{ color: 'hsl(var(--foreground))', fontWeight: 500 }}
                 itemStyle={{ color: 'hsl(var(--primary))' }}
                 formatter={(value: number) => [`${value} minutes`, 'Listened']}
+                labelFormatter={(_, payload) => payload[0]?.payload?.fullDate || ''}
               />
               <Area
                 type="monotone"
