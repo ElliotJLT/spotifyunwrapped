@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { parseCSV } from '@/lib/csvParser';
+import { generateInsightsData } from '@/lib/insightsParser';
 import { DailySummary, TopArtist, HourlyProfile, Session } from '@/types/spotify';
 import { HeroStats } from './HeroStats';
 import { ListeningTimeline } from './ListeningTimeline';
@@ -8,13 +9,20 @@ import { DayNightProfile } from './DayNightProfile';
 import { SessionInsights } from './SessionInsights';
 import { ArtistLoyalty } from './ArtistLoyalty';
 import { WeeklyRhythm } from './WeeklyRhythm';
-import { Music2 } from 'lucide-react';
+import { ForgottenFavorites } from './ForgottenFavorites';
+import { ObsessionPhases } from './ObsessionPhases';
+import { LateNightConfessions } from './LateNightConfessions';
+import { ListeningBehavior } from './ListeningBehavior';
+import { ShuffleVsIntentional } from './ShuffleVsIntentional';
+import { TimeCapsules } from './TimeCapsules';
+import { Music2, Sparkles } from 'lucide-react';
 
 interface DashboardProps {
   files: Record<string, string>;
+  rawJsonFiles?: string[];
 }
 
-export function Dashboard({ files }: DashboardProps) {
+export function Dashboard({ files, rawJsonFiles = [] }: DashboardProps) {
   const data = useMemo(() => {
     const dailySummary = files.daily_summary 
       ? parseCSV<DailySummary>(files.daily_summary) 
@@ -59,6 +67,11 @@ export function Dashboard({ files }: DashboardProps) {
       },
     };
   }, [files]);
+
+  const insights = useMemo(() => {
+    if (rawJsonFiles.length === 0) return null;
+    return generateInsightsData(rawJsonFiles);
+  }, [rawJsonFiles]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -111,6 +124,60 @@ export function Dashboard({ files }: DashboardProps) {
       {/* Weekly Rhythm */}
       {data.dailySummary.length > 0 && (
         <WeeklyRhythm data={data.dailySummary} />
+      )}
+
+      {/* New Insights Section */}
+      {insights && (
+        <>
+          <div className="py-12 border-t border-border/50">
+            <div className="container max-w-6xl mx-auto px-4">
+              <div className="flex items-center gap-3 mb-2">
+                <Sparkles className="w-6 h-6 text-primary" />
+                <h2 className="font-display text-3xl text-foreground">Deep Insights</h2>
+              </div>
+              <p className="text-muted-foreground">
+                Patterns Wrapped doesn't show you
+              </p>
+            </div>
+          </div>
+
+          {/* Forgotten Favorites */}
+          {insights.forgottenArtists.length > 0 && (
+            <ForgottenFavorites artists={insights.forgottenArtists} />
+          )}
+
+          {/* Obsession Phases */}
+          {insights.obsessionPhases.length > 0 && (
+            <ObsessionPhases phases={insights.obsessionPhases} />
+          )}
+
+          {/* Late Night Confessions */}
+          {insights.timePeriodProfiles.length > 0 && (
+            <LateNightConfessions profiles={insights.timePeriodProfiles} />
+          )}
+
+          {/* Listening Behavior */}
+          {insights.artistBehaviors.length > 0 && (
+            <ListeningBehavior
+              behaviors={insights.artistBehaviors}
+              overallSkipRate={insights.overallSkipRate}
+              overallCompletionRate={insights.overallCompletionRate}
+            />
+          )}
+
+          {/* Shuffle vs Intentional */}
+          {insights.shuffleStats.length > 0 && (
+            <ShuffleVsIntentional
+              stats={insights.shuffleStats}
+              overallPercent={insights.overallShufflePercent}
+            />
+          )}
+
+          {/* Time Capsules */}
+          {rawJsonFiles.length > 0 && (
+            <TimeCapsules jsonFiles={rawJsonFiles} />
+          )}
+        </>
       )}
 
       {/* Footer */}
