@@ -133,8 +133,8 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-8">
-      <div className="max-w-2xl w-full space-y-8 animate-fade-up">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 sm:px-6 md:px-8">
+      <div className="max-w-2xl w-full space-y-6 md:space-y-8 animate-fade-up">
         <div className="text-center space-y-4">
           <h1 className="text-4xl md:text-5xl font-display text-foreground">
             Your Music Diary
@@ -154,7 +154,7 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             className={`
-              relative card-elevated p-12 transition-all duration-300 cursor-pointer
+              relative card-elevated p-8 md:p-12 transition-all duration-300 cursor-pointer
               ${isDragging ? 'border-orange-400 scale-[1.02]' : 'hover:border-orange-400/50'}
             `}
             style={{ 

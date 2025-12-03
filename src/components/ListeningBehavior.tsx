@@ -33,8 +33,8 @@ export function ListeningBehavior({ behaviors, overallSkipRate, overallCompletio
   }
 
   return (
-    <section className="py-16 border-t border-border/50">
-      <div className="container max-w-6xl mx-auto px-4">
+    <section className="section-padding border-t border-border/50">
+      <div className="container-app">
         <div className="flex items-center gap-3 mb-2">
           <SkipForward className="w-5 h-5 text-primary" />
           <h2 className="font-display text-2xl text-foreground">Listening Behavior</h2>
@@ -44,15 +44,15 @@ export function ListeningBehavior({ behaviors, overallSkipRate, overallCompletio
         </p>
 
         {/* Overall Stats */}
-        <div className="grid grid-cols-2 gap-4 mb-8">
-          <div className="bg-card/50 border border-border/50 rounded-xl p-5">
+        <div className="grid grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-8">
+          <div className="bg-card/50 border border-border/50 rounded-xl p-4 md:p-5">
             <p className="text-muted-foreground text-sm mb-1">Overall Skip Rate</p>
             <p className="text-3xl font-display text-foreground">{overallSkipRate}%</p>
             <p className="text-xs text-muted-foreground mt-1">
               {overallSkipRate < 20 ? 'You let songs play!' : overallSkipRate < 40 ? 'Average skipper' : 'Picky listener'}
             </p>
           </div>
-          <div className="bg-card/50 border border-border/50 rounded-xl p-5">
+          <div className="bg-card/50 border border-border/50 rounded-xl p-4 md:p-5">
             <p className="text-muted-foreground text-sm mb-1">Avg Completion</p>
             <p className="text-3xl font-display text-foreground">{overallCompletionRate}%</p>
             <p className="text-xs text-muted-foreground mt-1">
@@ -61,9 +61,9 @@ export function ListeningBehavior({ behaviors, overallSkipRate, overallCompletio
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {/* Most Skipped */}
-          <div className="bg-card/30 border border-border/50 rounded-xl p-5">
+          <div className="bg-card/30 border border-border/50 rounded-xl p-4 md:p-5">
             <div className="flex items-center gap-2 mb-4">
               <XCircle className="w-4 h-4 text-destructive" />
               <h3 className="text-foreground font-medium">Most Skipped</h3>
@@ -82,7 +82,7 @@ export function ListeningBehavior({ behaviors, overallSkipRate, overallCompletio
           </div>
 
           {/* Least Skipped */}
-          <div className="bg-card/30 border border-border/50 rounded-xl p-5">
+          <div className="bg-card/30 border border-border/50 rounded-xl p-4 md:p-5">
             <div className="flex items-center gap-2 mb-4">
               <CheckCircle className="w-4 h-4 text-green-500" />
               <h3 className="text-foreground font-medium">Never Skip</h3>
@@ -101,7 +101,7 @@ export function ListeningBehavior({ behaviors, overallSkipRate, overallCompletio
           </div>
 
           {/* Most Completed */}
-          <div className="bg-card/30 border border-border/50 rounded-xl p-5">
+          <div className="bg-card/30 border border-border/50 rounded-xl p-4 md:p-5">
             <div className="flex items-center gap-2 mb-4">
               <CheckCircle className="w-4 h-4 text-primary" />
               <h3 className="text-foreground font-medium">Full Plays</h3>

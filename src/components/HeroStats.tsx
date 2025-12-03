@@ -49,8 +49,8 @@ export function HeroStats({ totalHours, uniqueArtists, longestSession, totalTrac
   ];
 
   return (
-    <section className="py-16 md:py-24">
-      <div className="container max-w-6xl mx-auto px-4">
+    <section className="section-padding">
+      <div className="container-app">
         <div className="text-center mb-12 animate-fade-up">
           <h2 className="text-3xl md:text-4xl font-display text-foreground mb-3">
             Your Year in Sound
@@ -60,12 +60,12 @@ export function HeroStats({ totalHours, uniqueArtists, longestSession, totalTrac
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
           {stats.map((stat, index) => (
             <div
               key={stat.label}
               className={`
-                card-elevated p-6 text-center animate-fade-up opacity-0
+                card-elevated p-4 md:p-6 text-center animate-fade-up opacity-0
                 stagger-${index + 1}
               `}
             >

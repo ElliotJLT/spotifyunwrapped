@@ -50,8 +50,8 @@ export function MusicEras({ artists }: MusicErasProps) {
       .slice(0, 5);
 
     return (
-      <section className="py-16">
-        <div className="container max-w-6xl mx-auto px-4">
+      <section className="section-padding border-t border-border/50">
+        <div className="container-app">
           <div className="mb-8 animate-fade-up">
             <h2 className="text-2xl md:text-3xl font-display text-foreground mb-2">
               Your Top Artists
@@ -85,8 +85,8 @@ export function MusicEras({ artists }: MusicErasProps) {
   }
 
   return (
-    <section className="py-16">
-      <div className="container max-w-6xl mx-auto px-4">
+    <section className="section-padding border-t border-border/50">
+      <div className="container-app">
         <div className="mb-8 animate-fade-up">
           <h2 className="text-2xl md:text-3xl font-display text-foreground mb-2">
             Your Music Eras

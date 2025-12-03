@@ -55,8 +55,8 @@ export function WeeklyRhythm({ data }: WeeklyRhythmProps) {
   if (!data.length) return null;
 
   return (
-    <section className="py-16">
-      <div className="container max-w-6xl mx-auto px-4">
+    <section className="section-padding border-t border-border/50">
+      <div className="container-app">
         <div className="mb-8 animate-fade-up">
           <h2 className="text-2xl md:text-3xl font-display text-foreground mb-2">
             Weekly Rhythm
@@ -66,9 +66,9 @@ export function WeeklyRhythm({ data }: WeeklyRhythmProps) {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-4 md:gap-6">
           {/* By Day of Week */}
-          <div className="card-elevated p-6 animate-fade-up stagger-1">
+          <div className="card-elevated p-4 md:p-6 animate-fade-up stagger-1">
             <h3 className="text-lg font-medium text-foreground mb-4">
               By Day of Week
             </h3>
@@ -105,7 +105,7 @@ export function WeeklyRhythm({ data }: WeeklyRhythmProps) {
           </div>
 
           {/* By Hour of Day */}
-          <div className="card-elevated p-6 animate-fade-up stagger-2">
+          <div className="card-elevated p-4 md:p-6 animate-fade-up stagger-2">
             <h3 className="text-lg font-medium text-foreground mb-4">
               By Hour of Day
             </h3>

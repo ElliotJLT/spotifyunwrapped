@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Share2, Download, X, Loader2 } from 'lucide-react';
+import { Share2, Download, X, Loader2, FileText, Image } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
@@ -7,9 +7,11 @@ import { jsPDF } from 'jspdf';
 export function ShareCard() {
   const [isOpen, setIsOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [progress, setProgress] = useState('');
 
   const handleDownloadPDF = async () => {
     setIsGenerating(true);
+    setProgress('Preparing dashboard...');
     
     try {
       const dashboard = document.querySelector('.min-h-screen.bg-background');
@@ -19,44 +21,70 @@ export function ShareCard() {
         return;
       }
 
-      // Capture full dashboard
+      // Hide elements that shouldn't be in the export
+      const header = dashboard.querySelector('header');
+      const originalHeaderDisplay = header?.style.display;
+      if (header) header.style.display = 'none';
+
+      setProgress('Capturing content...');
+      
+      // Capture full dashboard with better quality
       const canvas = await html2canvas(dashboard as HTMLElement, {
         backgroundColor: '#0c0a09',
-        scale: 1.5,
+        scale: 2,
         useCORS: true,
         logging: false,
         windowHeight: dashboard.scrollHeight,
         height: dashboard.scrollHeight,
+        onclone: (clonedDoc) => {
+          // Ensure animations don't interfere
+          const clonedDashboard = clonedDoc.querySelector('.min-h-screen.bg-background');
+          if (clonedDashboard) {
+            (clonedDashboard as HTMLElement).style.animation = 'none';
+            clonedDashboard.querySelectorAll('*').forEach((el) => {
+              (el as HTMLElement).style.animation = 'none';
+              (el as HTMLElement).style.opacity = '1';
+            });
+          }
+        },
       });
 
-      // Create PDF
-      const imgWidth = 210; // A4 width in mm
-      const pageHeight = 297; // A4 height in mm
+      // Restore header
+      if (header && originalHeaderDisplay !== undefined) {
+        header.style.display = originalHeaderDisplay;
+      }
+
+      setProgress('Generating PDF...');
+
+      // Create PDF with better margins
+      const imgWidth = 190; // A4 width minus margins
+      const pageHeight = 277; // A4 height minus margins
+      const margin = 10;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       
       const pdf = new jsPDF('p', 'mm', 'a4');
       let heightLeft = imgHeight;
-      let position = 0;
+      let position = margin;
 
       // Add first page
       pdf.addImage(
-        canvas.toDataURL('image/jpeg', 0.95),
+        canvas.toDataURL('image/jpeg', 0.92),
         'JPEG',
-        0,
+        margin,
         position,
         imgWidth,
         imgHeight
       );
-      heightLeft -= pageHeight;
+      heightLeft -= (pageHeight - margin);
 
       // Add subsequent pages if needed
       while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
+        position = heightLeft - imgHeight + margin;
         pdf.addPage();
         pdf.addImage(
-          canvas.toDataURL('image/jpeg', 0.95),
+          canvas.toDataURL('image/jpeg', 0.92),
           'JPEG',
-          0,
+          margin,
           position,
           imgWidth,
           imgHeight
@@ -70,11 +98,13 @@ export function ShareCard() {
     }
     
     setIsGenerating(false);
+    setProgress('');
     setIsOpen(false);
   };
 
   const handleDownloadImage = async () => {
     setIsGenerating(true);
+    setProgress('Capturing dashboard...');
     
     try {
       const dashboard = document.querySelector('.min-h-screen.bg-background');
@@ -83,6 +113,11 @@ export function ShareCard() {
         return;
       }
 
+      // Hide header for cleaner export
+      const header = dashboard.querySelector('header');
+      const originalHeaderDisplay = header?.style.display;
+      if (header) header.style.display = 'none';
+
       const canvas = await html2canvas(dashboard as HTMLElement, {
         backgroundColor: '#0c0a09',
         scale: 2,
@@ -90,7 +125,22 @@ export function ShareCard() {
         logging: false,
         windowHeight: dashboard.scrollHeight,
         height: dashboard.scrollHeight,
+        onclone: (clonedDoc) => {
+          const clonedDashboard = clonedDoc.querySelector('.min-h-screen.bg-background');
+          if (clonedDashboard) {
+            (clonedDashboard as HTMLElement).style.animation = 'none';
+            clonedDashboard.querySelectorAll('*').forEach((el) => {
+              (el as HTMLElement).style.animation = 'none';
+              (el as HTMLElement).style.opacity = '1';
+            });
+          }
+        },
       });
+
+      // Restore header
+      if (header && originalHeaderDisplay !== undefined) {
+        header.style.display = originalHeaderDisplay;
+      }
 
       const link = document.createElement('a');
       link.download = 'my-music-diary.png';
@@ -101,6 +151,7 @@ export function ShareCard() {
     }
     
     setIsGenerating(false);
+    setProgress('');
     setIsOpen(false);
   };
 
@@ -136,7 +187,7 @@ export function ShareCard() {
             {isGenerating && (
               <div className="flex items-center gap-2 text-sm text-muted-foreground py-2">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Generating... this may take a moment</span>
+                <span>{progress || 'Generating... this may take a moment'}</span>
               </div>
             )}
 
@@ -146,7 +197,7 @@ export function ShareCard() {
                 className="w-full gap-2 bg-orange-500 hover:bg-orange-600 text-white"
                 disabled={isGenerating}
               >
-                <Download className="w-4 h-4" />
+                <FileText className="w-4 h-4" />
                 Download PDF
               </Button>
               <Button
@@ -155,7 +206,7 @@ export function ShareCard() {
                 className="w-full gap-2"
                 disabled={isGenerating}
               >
-                <Download className="w-4 h-4" />
+                <Image className="w-4 h-4" />
                 Download Image
               </Button>
             </div>

@@ -30,8 +30,8 @@ export function ArtistLoyalty({ artists }: ArtistLoyaltyProps) {
   if (!chartData.length) return null;
 
   return (
-    <section className="py-16">
-      <div className="container max-w-6xl mx-auto px-4">
+    <section className="section-padding border-t border-border/50">
+      <div className="container-app">
         <div className="mb-8 animate-fade-up">
           <h2 className="text-2xl md:text-3xl font-display text-foreground mb-2">
             Artist Loyalty
@@ -41,7 +41,7 @@ export function ArtistLoyalty({ artists }: ArtistLoyaltyProps) {
           </p>
         </div>
 
-        <div className="card-elevated p-6 animate-fade-up stagger-1">
+        <div className="card-elevated p-4 md:p-6 animate-fade-up stagger-1">
           <ResponsiveContainer width="100%" height={400}>
             <BarChart
               data={chartData}

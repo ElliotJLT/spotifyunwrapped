@@ -38,8 +38,8 @@ export function ShuffleVsIntentional({ stats, overallPercent }: ShuffleVsIntenti
   }
 
   return (
-    <section className="py-16 border-t border-border/50">
-      <div className="container max-w-6xl mx-auto px-4">
+    <section className="section-padding border-t border-border/50">
+      <div className="container-app">
         <div className="flex items-center gap-3 mb-2">
           <Shuffle className="w-5 h-5 text-primary" />
           <h2 className="font-display text-2xl text-foreground">Shuffle vs. Intentional</h2>
@@ -48,9 +48,9 @@ export function ShuffleVsIntentional({ stats, overallPercent }: ShuffleVsIntenti
           Do you curate or let the algorithm decide?
         </p>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
           {/* Overall Stat */}
-          <div className="lg:col-span-1 bg-card/50 border border-border/50 rounded-xl p-6">
+          <div className="lg:col-span-1 bg-card/50 border border-border/50 rounded-xl p-4 md:p-6">
             <div className="flex items-center justify-center gap-4 mb-4">
               <div className="text-center">
                 <Shuffle className="w-8 h-8 text-primary mx-auto mb-2" />
@@ -78,7 +78,7 @@ export function ShuffleVsIntentional({ stats, overallPercent }: ShuffleVsIntenti
           </div>
 
           {/* Chart */}
-          <div className="lg:col-span-2 bg-card/30 border border-border/50 rounded-xl p-5">
+          <div className="lg:col-span-2 bg-card/30 border border-border/50 rounded-xl p-4 md:p-5">
             <h3 className="text-foreground font-medium mb-4">Year by Year</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">

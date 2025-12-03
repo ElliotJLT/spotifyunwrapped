@@ -57,8 +57,8 @@ export function SessionInsights({ sessions }: SessionInsightsProps) {
   ];
 
   return (
-    <section className="py-16">
-      <div className="container max-w-6xl mx-auto px-4">
+    <section className="section-padding border-t border-border/50">
+      <div className="container-app">
         <div className="mb-8 animate-fade-up">
           <h2 className="text-2xl md:text-3xl font-display text-foreground mb-2">
             Listening Sessions
@@ -68,11 +68,11 @@ export function SessionInsights({ sessions }: SessionInsightsProps) {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
           {statCards.map((stat, index) => (
             <div
               key={stat.label}
-              className={`card-elevated p-5 animate-fade-up opacity-0 stagger-${index + 1}`}
+              className={`card-elevated p-4 md:p-5 animate-fade-up opacity-0 stagger-${index + 1}`}
             >
               <stat.icon className={`w-5 h-5 ${stat.color} mb-3`} />
               <p className={`text-xl md:text-2xl font-display ${stat.color}`}>
@@ -83,7 +83,7 @@ export function SessionInsights({ sessions }: SessionInsightsProps) {
           ))}
         </div>
 
-        <div className="card-elevated p-6 animate-fade-up stagger-5">
+        <div className="card-elevated p-4 md:p-6 animate-fade-up stagger-5">
           <h3 className="text-lg font-medium text-foreground mb-4">
             Marathon Sessions
           </h3>

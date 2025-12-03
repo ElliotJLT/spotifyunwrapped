@@ -31,8 +31,8 @@ export function TimeCapsules({ jsonFiles }: TimeCapsulesProps) {
   };
 
   return (
-    <section className="py-16 border-t border-border/50">
-      <div className="container max-w-6xl mx-auto px-4">
+    <section className="section-padding border-t border-border/50">
+      <div className="container-app">
         <div className="flex items-center gap-3 mb-2">
           <Calendar className="w-5 h-5 text-primary" />
           <h2 className="font-display text-2xl text-foreground">Time Capsules</h2>
@@ -41,7 +41,7 @@ export function TimeCapsules({ jsonFiles }: TimeCapsulesProps) {
           What were you listening to on this day in past years?
         </p>
 
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex flex-wrap items-center gap-3 md:gap-4 mb-6 md:mb-8">
           <div className="bg-card/50 border border-border/50 rounded-lg px-4 py-2">
             <span className="text-foreground font-medium">{formatDateDisplay(targetDate)}</span>
           </div>
@@ -57,7 +57,7 @@ export function TimeCapsules({ jsonFiles }: TimeCapsulesProps) {
         </div>
 
         {capsules.length === 0 ? (
-          <div className="text-center py-12 bg-card/30 border border-border/50 rounded-xl">
+          <div className="text-center py-8 md:py-12 bg-card/30 border border-border/50 rounded-xl">
             <Calendar className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" />
             <p className="text-muted-foreground">
               No listening data found for {formatDateDisplay(targetDate)}
@@ -67,11 +67,11 @@ export function TimeCapsules({ jsonFiles }: TimeCapsulesProps) {
             </p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3 md:space-y-4">
             {capsules.map((capsule) => (
               <div
                 key={capsule.year}
-                className="bg-card/50 border border-border/50 rounded-xl p-5"
+                className="bg-card/50 border border-border/50 rounded-xl p-4 md:p-5"
               >
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-2xl font-display text-primary">{capsule.year}</span>
