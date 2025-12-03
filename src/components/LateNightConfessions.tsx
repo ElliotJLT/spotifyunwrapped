@@ -58,8 +58,8 @@ export function LateNightConfessions({ profiles }: LateNightConfessionsProps) {
   };
 
   return (
-    <section className="py-16 border-t border-border/50">
-      <div className="container max-w-6xl mx-auto px-4">
+    <section className="section-padding border-t border-border/50">
+      <div className="container-app">
         <div className="flex items-center gap-3 mb-2">
           <Moon className="w-5 h-5 text-primary" />
           <h2 className="font-display text-2xl text-foreground">Late Night Confessions</h2>
@@ -68,7 +68,7 @@ export function LateNightConfessions({ profiles }: LateNightConfessionsProps) {
           Your music taste changes with the clock
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
           {profiles.map((profile) => {
             const config = periodConfig[profile.period];
             const Icon = config.icon;

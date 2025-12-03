@@ -38,8 +38,8 @@ export function DayNightProfile({ data }: DayNightProfileProps) {
   };
 
   return (
-    <section className="py-16">
-      <div className="container max-w-6xl mx-auto px-4">
+    <section className="section-padding border-t border-border/50">
+      <div className="container-app">
         <div className="mb-8 animate-fade-up">
           <h2 className="text-2xl md:text-3xl font-display text-foreground mb-2">
             Day & Night Profile
@@ -49,7 +49,7 @@ export function DayNightProfile({ data }: DayNightProfileProps) {
           </p>
         </div>
 
-        <div className="card-elevated p-6 overflow-x-auto animate-fade-up stagger-1">
+        <div className="card-elevated p-4 md:p-6 overflow-x-auto animate-fade-up stagger-1">
           <div className="min-w-[600px]">
             {/* Hour labels */}
             <div className="flex mb-2 ml-32">

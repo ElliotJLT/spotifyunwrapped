@@ -29,8 +29,8 @@ export function ObsessionPhases({ phases }: ObsessionPhasesProps) {
   };
 
   return (
-    <section className="py-16 border-t border-border/50">
-      <div className="container max-w-6xl mx-auto px-4">
+    <section className="section-padding border-t border-border/50">
+      <div className="container-app">
         <div className="flex items-center gap-3 mb-2">
           <Flame className="w-5 h-5 text-primary" />
           <h2 className="font-display text-2xl text-foreground">Obsession Phases</h2>

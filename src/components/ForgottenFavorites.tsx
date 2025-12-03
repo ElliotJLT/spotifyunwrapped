@@ -26,8 +26,8 @@ export function ForgottenFavorites({ artists }: ForgottenFavoritesProps) {
   };
 
   return (
-    <section className="py-16 border-t border-border/50">
-      <div className="container max-w-6xl mx-auto px-4">
+    <section className="section-padding border-t border-border/50">
+      <div className="container-app">
         <div className="flex items-center gap-3 mb-2">
           <Ghost className="w-5 h-5 text-primary" />
           <h2 className="font-display text-2xl text-foreground">Forgotten Favorites</h2>
@@ -36,7 +36,7 @@ export function ForgottenFavorites({ artists }: ForgottenFavoritesProps) {
           Artists you used to love but haven't played in over a year
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
           {displayArtists.map((artist, index) => (
             <div
               key={artist.artist}

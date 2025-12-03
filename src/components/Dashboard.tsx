@@ -77,8 +77,8 @@ export function Dashboard({ files, rawJsonFiles = [] }: DashboardProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
-        <div className="container max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50 no-print">
+        <div className="container-app py-3 md:py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500/20 to-amber-500/20 flex items-center justify-center">
               <BookHeart className="w-4 h-4 text-orange-400" />
@@ -173,8 +173,8 @@ export function Dashboard({ files, rawJsonFiles = [] }: DashboardProps) {
       )}
 
       {/* Footer */}
-      <footer className="py-12 border-t border-border/50">
-        <div className="container max-w-6xl mx-auto px-4 text-center">
+      <footer className="section-padding border-t border-border/50">
+        <div className="container-app text-center">
           <p className="text-muted-foreground text-sm">
             Your personal music diary • Data stays local
           </p>
