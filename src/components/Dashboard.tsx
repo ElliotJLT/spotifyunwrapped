@@ -15,6 +15,7 @@ import { LateNightConfessions } from './LateNightConfessions';
 import { ListeningBehavior } from './ListeningBehavior';
 import { ShuffleVsIntentional } from './ShuffleVsIntentional';
 import { TimeCapsules } from './TimeCapsules';
+import { ShareCard } from './ShareCard';
 import { Music2, Sparkles } from 'lucide-react';
 
 interface DashboardProps {
@@ -84,12 +85,18 @@ export function Dashboard({ files, rawJsonFiles = [] }: DashboardProps) {
             </div>
             <span className="font-display text-lg text-foreground">Music Diary</span>
           </div>
-          <button
-            onClick={() => window.location.reload()}
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Upload New Data
-          </button>
+          <div className="flex items-center gap-3">
+            <ShareCard 
+              stats={data.heroStats} 
+              topArtists={data.topArtists.slice(0, 5).map(a => a.artist)} 
+            />
+            <button
+              onClick={() => window.location.reload()}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Upload New Data
+            </button>
+          </div>
         </div>
       </header>
 
