@@ -185,7 +185,7 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
               </div>
               <div>
                 <p className="text-foreground font-medium text-lg">
-                  {isProcessing ? 'Processing your listening history...' : 'Drop your JSON or CSV files here'}
+                  {isProcessing ? 'Processing your listening history...' : 'Drop your listening history files here'}
                 </p>
                 <p className="text-muted-foreground text-sm mt-1">
                   {isProcessing 
