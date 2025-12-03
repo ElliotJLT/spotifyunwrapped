@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 import { parseSpotifyJSON } from '@/lib/jsonParser';
 
 interface FileUploadProps {
-  onFilesUploaded: (files: Record<string, string>) => void;
+  onFilesUploaded: (files: Record<string, string>, rawJsonFiles?: string[]) => void;
 }
 
 const expectedFiles = [
@@ -90,7 +90,7 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
           };
           setUploadedFiles(combinedFiles);
           setIsProcessing(false);
-          onFilesUploaded(combinedFiles);
+          onFilesUploaded(combinedFiles, newJsonFiles);
         } catch (e) {
           console.error('Error processing JSON files:', e);
           setIsProcessing(false);
