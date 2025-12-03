@@ -1,4 +1,4 @@
-import { Upload, FileCheck, Music2, Loader2, ExternalLink, ArrowRight } from 'lucide-react';
+import { Upload, FileCheck, Music2, Loader2, ExternalLink, ArrowRight, Ghost, Flame, Moon, SkipForward, Shuffle, Calendar, Sparkles } from 'lucide-react';
 import { useState, useCallback } from 'react';
 import { parseSpotifyJSON } from '@/lib/jsonParser';
 
@@ -7,11 +7,20 @@ interface FileUploadProps {
 }
 
 const expectedFiles = [
-  { key: 'listening_events', label: 'Listening Events', file: 'listening_events_clean.csv' },
-  { key: 'daily_summary', label: 'Daily Summary', file: 'daily_listening_summary.csv' },
-  { key: 'top_artists', label: 'Top Artists', file: 'top_artists_overall.csv' },
-  { key: 'hourly_profile', label: 'Hourly Profile', file: 'hourly_profile_top_artists.csv' },
-  { key: 'sessions', label: 'Sessions', file: 'listening_sessions_summary.csv' },
+  { key: 'listening_events', file: 'listening_events_clean.csv' },
+  { key: 'daily_summary', file: 'daily_listening_summary.csv' },
+  { key: 'top_artists', file: 'top_artists_overall.csv' },
+  { key: 'hourly_profile', file: 'hourly_profile_top_artists.csv' },
+  { key: 'sessions', file: 'listening_sessions_summary.csv' },
+];
+
+const insightPreviews = [
+  { icon: Ghost, label: 'Forgotten Favorites', desc: 'Artists you abandoned' },
+  { icon: Flame, label: 'Obsession Phases', desc: 'Your binge weeks' },
+  { icon: Moon, label: 'Late Night Persona', desc: 'Your 2am music taste' },
+  { icon: SkipForward, label: 'Skip Patterns', desc: 'What you really love' },
+  { icon: Shuffle, label: 'Shuffle vs Curated', desc: 'Your listening style' },
+  { icon: Calendar, label: 'Time Capsules', desc: 'Music memories' },
 ];
 
 export function FileUpload({ onFilesUploaded }: FileUploadProps) {
@@ -181,30 +190,35 @@ export function FileUpload({ onFilesUploaded }: FileUploadProps) {
         </div>
 
         {jsonFiles.length > 0 && (
-          <div className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm bg-accent/20 text-accent border border-accent/30">
+          <div className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm bg-primary/20 text-primary border border-primary/30">
             <FileCheck className="w-4 h-4 flex-shrink-0" />
-            <span>{jsonFiles.length} JSON file(s) loaded</span>
+            <span>{jsonFiles.length} JSON file(s) loaded • Ready to explore!</span>
           </div>
         )}
 
-        {jsonFiles.length === 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {expectedFiles.map((file) => (
-              <div
-                key={file.key}
-                className={`
-                  flex items-center gap-2 px-4 py-3 rounded-xl text-sm transition-all
-                  ${uploadedFiles[file.key] 
-                    ? 'bg-accent/20 text-accent border border-accent/30' 
-                    : 'bg-secondary/50 text-muted-foreground border border-transparent'}
-                `}
-              >
-                <FileCheck className={`w-4 h-4 flex-shrink-0 ${uploadedFiles[file.key] ? 'text-accent' : 'text-muted-foreground/50'}`} />
-                <span className="truncate">{file.label}</span>
-              </div>
-            ))}
+        {/* Insight Preview Pills */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm">
+            <Sparkles className="w-4 h-4 text-primary" />
+            <span>Insights you'll unlock</span>
           </div>
-        )}
+          <div className="flex flex-wrap justify-center gap-2">
+            {insightPreviews.map((insight, index) => {
+              const Icon = insight.icon;
+              return (
+                <div
+                  key={insight.label}
+                  className="group flex items-center gap-2 px-3 py-2 rounded-full bg-card/60 border border-border/50 hover:border-primary/50 hover:bg-card transition-all duration-200"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <Icon className="w-3.5 h-3.5 text-primary" />
+                  <span className="text-xs font-medium text-foreground">{insight.label}</span>
+                  <span className="text-xs text-muted-foreground hidden sm:inline">• {insight.desc}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
         {Object.keys(uploadedFiles).length > 0 && !isProcessing && (
           <p className="text-center text-muted-foreground text-sm animate-fade-in">
