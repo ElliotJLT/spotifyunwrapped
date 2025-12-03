@@ -1,29 +1,97 @@
-import { useState, useRef } from 'react';
-import { Share2, Download, X, Music2 } from 'lucide-react';
+import { useState } from 'react';
+import { Share2, Download, X, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import html2canvas from 'html2canvas';
-import type { HeroStats } from '@/types/spotify';
+import { jsPDF } from 'jspdf';
 
-interface ShareCardProps {
-  stats: HeroStats;
-  topArtists: string[];
-}
-
-export function ShareCard({ stats, topArtists }: ShareCardProps) {
+export function ShareCard() {
   const [isOpen, setIsOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
 
-  const handleDownload = async () => {
-    if (!cardRef.current) return;
-    
+  const handleDownloadPDF = async () => {
     setIsGenerating(true);
+    
     try {
-      const canvas = await html2canvas(cardRef.current, {
+      const dashboard = document.querySelector('.min-h-screen.bg-background');
+      if (!dashboard) {
+        console.error('Dashboard not found');
+        setIsGenerating(false);
+        return;
+      }
+
+      // Capture full dashboard
+      const canvas = await html2canvas(dashboard as HTMLElement, {
+        backgroundColor: '#0c0a09',
+        scale: 1.5,
+        useCORS: true,
+        logging: false,
+        windowHeight: dashboard.scrollHeight,
+        height: dashboard.scrollHeight,
+      });
+
+      // Create PDF
+      const imgWidth = 210; // A4 width in mm
+      const pageHeight = 297; // A4 height in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      // Add first page
+      pdf.addImage(
+        canvas.toDataURL('image/jpeg', 0.95),
+        'JPEG',
+        0,
+        position,
+        imgWidth,
+        imgHeight
+      );
+      heightLeft -= pageHeight;
+
+      // Add subsequent pages if needed
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(
+          canvas.toDataURL('image/jpeg', 0.95),
+          'JPEG',
+          0,
+          position,
+          imgWidth,
+          imgHeight
+        );
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save('my-music-diary.pdf');
+    } catch (error) {
+      console.error('Failed to generate PDF:', error);
+    }
+    
+    setIsGenerating(false);
+    setIsOpen(false);
+  };
+
+  const handleDownloadImage = async () => {
+    setIsGenerating(true);
+    
+    try {
+      const dashboard = document.querySelector('.min-h-screen.bg-background');
+      if (!dashboard) {
+        setIsGenerating(false);
+        return;
+      }
+
+      const canvas = await html2canvas(dashboard as HTMLElement, {
         backgroundColor: '#0c0a09',
         scale: 2,
+        useCORS: true,
+        logging: false,
+        windowHeight: dashboard.scrollHeight,
+        height: dashboard.scrollHeight,
       });
-      
+
       const link = document.createElement('a');
       link.download = 'my-music-diary.png';
       link.href = canvas.toDataURL('image/png');
@@ -31,46 +99,9 @@ export function ShareCard({ stats, topArtists }: ShareCardProps) {
     } catch (error) {
       console.error('Failed to generate image:', error);
     }
-    setIsGenerating(false);
-  };
-
-  const handleShare = async () => {
-    if (!cardRef.current) return;
     
-    setIsGenerating(true);
-    try {
-      const canvas = await html2canvas(cardRef.current, {
-        backgroundColor: '#0c0a09',
-        scale: 2,
-      });
-      
-      canvas.toBlob(async (blob) => {
-        if (!blob) return;
-        
-        if (navigator.share && navigator.canShare) {
-          const file = new File([blob], 'my-music-diary.png', { type: 'image/png' });
-          const shareData = {
-            files: [file],
-            title: 'My Music Diary',
-            text: 'Check out my listening stats! Get yours at',
-          };
-          
-          if (navigator.canShare(shareData)) {
-            await navigator.share(shareData);
-          } else {
-            // Fallback to download
-            handleDownload();
-          }
-        } else {
-          // Fallback to download
-          handleDownload();
-        }
-        setIsGenerating(false);
-      });
-    } catch (error) {
-      console.error('Failed to share:', error);
-      setIsGenerating(false);
-    }
+    setIsGenerating(false);
+    setIsOpen(false);
   };
 
   return (
@@ -82,14 +113,14 @@ export function ShareCard({ stats, topArtists }: ShareCardProps) {
         className="gap-2"
       >
         <Share2 className="w-4 h-4" />
-        Share Stats
+        Export
       </Button>
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-card border border-border rounded-2xl p-6 max-w-md w-full space-y-4">
+          <div className="bg-card border border-border rounded-2xl p-6 max-w-sm w-full space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-foreground font-medium">Share Your Stats</h3>
+              <h3 className="text-foreground font-medium">Export Your Diary</h3>
               <button
                 onClick={() => setIsOpen(false)}
                 className="text-muted-foreground hover:text-foreground"
@@ -98,87 +129,40 @@ export function ShareCard({ stats, topArtists }: ShareCardProps) {
               </button>
             </div>
 
-            {/* The card to be captured */}
-            <div
-              ref={cardRef}
-              className="rounded-xl overflow-hidden"
-              style={{ backgroundColor: '#0c0a09' }}
-            >
-              <div className="p-6 space-y-4">
-                {/* Header */}
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center">
-                    <Music2 className="w-4 h-4 text-orange-400" />
-                  </div>
-                  <span className="text-white/90 font-medium">My Music Diary</span>
-                </div>
+            <p className="text-sm text-muted-foreground">
+              Save your full music diary as a PDF or image to share with friends.
+            </p>
 
-                {/* Stats Grid */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-white/5 rounded-lg p-3">
-                    <p className="text-white/50 text-xs">Total Hours</p>
-                    <p className="text-2xl font-bold text-orange-400">{stats.totalHours.toLocaleString()}</p>
-                  </div>
-                  <div className="bg-white/5 rounded-lg p-3">
-                    <p className="text-white/50 text-xs">Artists</p>
-                    <p className="text-2xl font-bold text-white">{stats.uniqueArtists.toLocaleString()}</p>
-                  </div>
-                  <div className="bg-white/5 rounded-lg p-3">
-                    <p className="text-white/50 text-xs">Tracks Played</p>
-                    <p className="text-2xl font-bold text-white">{stats.totalTracks.toLocaleString()}</p>
-                  </div>
-                  <div className="bg-white/5 rounded-lg p-3">
-                    <p className="text-white/50 text-xs">Daily Avg</p>
-                    <p className="text-2xl font-bold text-white">{stats.averageDaily}m</p>
-                  </div>
-                </div>
-
-                {/* Top Artists */}
-                {topArtists.length > 0 && (
-                  <div className="space-y-2">
-                    <p className="text-white/50 text-xs">Top Artists</p>
-                    <div className="flex flex-wrap gap-2">
-                      {topArtists.slice(0, 5).map((artist) => (
-                        <span
-                          key={artist}
-                          className="px-2 py-1 bg-orange-500/20 text-orange-300 rounded-full text-xs"
-                        >
-                          {artist}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Footer */}
-                <div className="pt-2 border-t border-white/10">
-                  <p className="text-white/30 text-xs text-center">
-                    musicdiary.app • Your listening journey
-                  </p>
-                </div>
+            {isGenerating && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground py-2">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Generating... this may take a moment</span>
               </div>
-            </div>
+            )}
 
-            {/* Actions */}
-            <div className="flex gap-3">
+            <div className="flex flex-col gap-3">
               <Button
-                onClick={handleDownload}
-                variant="outline"
-                className="flex-1 gap-2"
+                onClick={handleDownloadPDF}
+                className="w-full gap-2 bg-orange-500 hover:bg-orange-600 text-white"
                 disabled={isGenerating}
               >
                 <Download className="w-4 h-4" />
-                Download
+                Download PDF
               </Button>
               <Button
-                onClick={handleShare}
-                className="flex-1 gap-2 bg-orange-500 hover:bg-orange-600 text-white"
+                onClick={handleDownloadImage}
+                variant="outline"
+                className="w-full gap-2"
                 disabled={isGenerating}
               >
-                <Share2 className="w-4 h-4" />
-                {isGenerating ? 'Generating...' : 'Share'}
+                <Download className="w-4 h-4" />
+                Download Image
               </Button>
             </div>
+
+            <p className="text-xs text-muted-foreground text-center">
+              Your data stays on your device
+            </p>
           </div>
         </div>
       )}
