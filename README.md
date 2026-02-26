@@ -1,4 +1,4 @@
-# spotifyunwrapped
+# 🎧 spotifyunwrapped
 
 Your Spotify data, visualised properly. Privacy-first listening analytics that run entirely in your browser.
 
@@ -24,13 +24,13 @@ Then request your data from [Spotify Privacy Settings](https://www.spotify.com/a
 
 ## Features
 
-- **Listening Timeline** — daily activity over your entire history
-- **Music Eras** — how your top artists evolved year by year
-- **Forgotten Favourites** — artists you loved but haven't played in 12+ months
-- **Obsession Phases** — weeks where one artist dominated 30%+ of your plays
-- **Late Night Confessions** — what you listen to at 2am vs 2pm
-- **Session Insights** — duration, frequency, skip rates, shuffle vs intentional
-- **Export** — download your dashboard as PDF or PNG
+- 📈 **Listening Timeline** — daily activity over your entire history
+- 🎵 **Music Eras** — how your top artists evolved year by year
+- 💔 **Forgotten Favourites** — artists you loved but haven't played in 12+ months
+- 🔥 **Obsession Phases** — weeks where one artist dominated 30%+ of your plays
+- 🌙 **Late Night Confessions** — what you listen to at 2am vs 2pm
+- ⏭️ **Session Insights** — duration, frequency, skip rates, shuffle vs intentional
+- 📥 **Export** — download your dashboard as PDF or PNG
 
 ## Tech
 
