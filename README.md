@@ -1,73 +1,41 @@
-# Welcome to your Lovable project
+# spotifyunwrapped
 
-## Project info
+Your Spotify data, visualised properly. Privacy-first listening analytics that run entirely in your browser.
 
-**URL**: https://lovable.dev/projects/9dbd0ffa-4c18-438c-9419-d612729df8bf
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-## How can I edit this code?
+## What
 
-There are several ways of editing your application.
+Spotify Wrapped gives you a 60-second slideshow once a year. This gives you the full picture — any time, with your complete listening history. Upload your Spotify data export and get deep analytics: forgotten favourites, obsession phases, late-night music taste, session patterns, and more. All processing happens client-side. Your data never leaves your device.
 
-**Use Lovable**
+## Quick Start
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/9dbd0ffa-4c18-438c-9419-d612729df8bf) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
+git clone https://github.com/ElliotJLT/spotifyunwrapped.git
+cd spotifyunwrapped
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Then request your data from [Spotify Privacy Settings](https://www.spotify.com/account/privacy/) (select "Extended streaming history"). Upload the JSON files when they arrive.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Features
 
-**Use GitHub Codespaces**
+- **Listening Timeline** — daily activity over your entire history
+- **Music Eras** — how your top artists evolved year by year
+- **Forgotten Favourites** — artists you loved but haven't played in 12+ months
+- **Obsession Phases** — weeks where one artist dominated 30%+ of your plays
+- **Late Night Confessions** — what you listen to at 2am vs 2pm
+- **Session Insights** — duration, frequency, skip rates, shuffle vs intentional
+- **Export** — download your dashboard as PDF or PNG
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Tech
 
-## What technologies are used for this project?
+React, TypeScript, Vite, Tailwind CSS, shadcn/ui, Recharts.
 
-This project is built with:
+## License
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/9dbd0ffa-4c18-438c-9419-d612729df8bf) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+MIT
